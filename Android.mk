@@ -48,3 +48,20 @@ endif
 include $(BUILD_STATIC_LIBRARY)
 
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := axssl
+LOCAL_MODULE_TAGS := optional
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/config
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/crypto
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/ssl
+
+#LOCAL_CFLAGS := -Wall -Werror
+
+LOCAL_SRC_FILES := samples/c/axssl.c
+
+LOCAL_STATIC_LIBRARIES += libyahoo_axtls
+
+include $(BUILD_EXECUTABLE)
+
+
