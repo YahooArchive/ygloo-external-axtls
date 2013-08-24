@@ -43,6 +43,19 @@
  * The axtls shared library must be in the same directory or be found 
  * by the OS.
  */
+
+
+/* protect all Yahoo specific changes
+ * YAHOO_EMBEDDED_CERT loads Yahoo-specific root CAs from memory
+ * and turns on cert verification
+ */
+#define YAHOO_EMBEDDED_CERT 1
+
+#ifdef YAHOO_EMBEDDED_CERT
+#include "../../yahoo_certs/ycerts.h"
+#endif
+
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -584,6 +597,10 @@ static void do_client(int argc, char *argv[])
         }
     }
 
+#ifdef YAHOO_EMBEDDED_CERT
+  ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, DigiCert_High_Assurance_EV_Root_CA_cer, DigiCert_High_Assurance_EV_Root_CA_cer_len, NULL);
+#endif
+
     for (i = 0; i < ca_cert_index; i++)
     {
         if (ssl_obj_load(ssl_ctx, SSL_OBJ_X509_CACERT, ca_cert[i], NULL))
@@ -669,6 +686,16 @@ static void do_client(int argc, char *argv[])
 
     if (!quiet)
     {
+
+#ifdef YAHOO_EMBEDDED_CERT
+      int error = ssl_verify_cert(ssl);
+      if (error == SSL_OK) {
+        printf("cert verified\n");
+      } else {
+        printf("WARNING: invalid certificate SSL error: %d\n", error);
+      }
+#endif
+
         const char *common_name = ssl_get_cert_dn(ssl,
                 SSL_X509_CERT_COMMON_NAME);
         if (common_name)
