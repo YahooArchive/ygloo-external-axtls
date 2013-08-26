@@ -51,10 +51,6 @@
  */
 #define YAHOO_EMBEDDED_CERT 1
 
-#ifdef YAHOO_EMBEDDED_CERT
-#include "../../yahoo_certs/ycerts.h"
-#endif
-
 
 #include <string.h>
 #include <stdio.h>
@@ -596,10 +592,6 @@ static void do_client(int argc, char *argv[])
             exit(1);
         }
     }
-
-#ifdef YAHOO_EMBEDDED_CERT
-  ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, DigiCert_High_Assurance_EV_Root_CA_cer, DigiCert_High_Assurance_EV_Root_CA_cer_len, NULL);
-#endif
 
     for (i = 0; i < ca_cert_index; i++)
     {
