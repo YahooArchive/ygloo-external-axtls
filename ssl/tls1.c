@@ -39,6 +39,17 @@
 #include "os_port.h"
 #include "ssl.h"
 
+/* protect all Yahoo specific changes
+ * YAHOO_EMBEDDED_CERT loads Yahoo-specific root CAs from memory
+ * and turns on cert verification
+ */
+#define YAHOO_EMBEDDED_CERT 1
+
+#ifdef YAHOO_EMBEDDED_CERT
+#include "../yahoo_certs/ycerts.h"
+#endif
+
+
 /* The session expiry time */
 #define SSL_EXPIRY_TIME     (CONFIG_SSL_EXPIRY_TIME*3600)
 
@@ -589,6 +600,12 @@ SSL *ssl_new(SSL_CTX *ssl_ctx, int client_fd)
         ssl_ctx->tail->next = ssl;
         ssl_ctx->tail = ssl;
     }
+
+#if YAHOO_EMBEDDED_CERT
+    ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, Entrust_net_Secure_Server_Certification_Authority_cer , Entrust_net_Secure_Server_Certification_Authority_cer_len, NULL);
+    ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, GTE_CyberTrust_Global_Root_cer, GTE_CyberTrust_Global_Root_cer_len, NULL);
+    ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, DigiCert_High_Assurance_EV_Root_CA_cer, DigiCert_High_Assurance_EV_Root_CA_cer_len, NULL);
+#endif
 
     SSL_CTX_UNLOCK(ssl_ctx->mutex);
     return ssl;
