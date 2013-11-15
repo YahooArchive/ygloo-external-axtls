@@ -248,15 +248,6 @@ static int asn1_get_utc_time(const uint8_t *buf, int *offset, time_t *t)
           tm.tm_mon = 0;
           tm.tm_mday = 1;
         }
-        else if (abs_year >= 2050)
-        {
-          tm.tm_year = 50;
-          tm.tm_mon = 11;
-          tm.tm_mday = 31;
-          tm.tm_hour = 23;
-          tm.tm_min = 59;
-          tm.tm_sec = 59;
-        }
         else
         {
           tm.tm_year = abs_year - 1900;
