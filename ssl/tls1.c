@@ -605,6 +605,7 @@ SSL *ssl_new(SSL_CTX *ssl_ctx, int client_fd)
     ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, Entrust_net_Secure_Server_Certification_Authority_cer , Entrust_net_Secure_Server_Certification_Authority_cer_len, NULL);
     ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, GTE_CyberTrust_Global_Root_cer, GTE_CyberTrust_Global_Root_cer_len, NULL);
     ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, DigiCert_High_Assurance_EV_Root_CA_cer, DigiCert_High_Assurance_EV_Root_CA_cer_len, NULL);
+    ssl_obj_memory_load(ssl_ctx, SSL_OBJ_X509_CACERT, Baltimore_CyberTrust_Root_cer, Baltimore_CyberTrust_Root_cer_len, NULL);
 #endif
 
     SSL_CTX_UNLOCK(ssl_ctx->mutex);

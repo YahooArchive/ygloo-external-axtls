@@ -9,5 +9,6 @@
 
 // api.flickr.com (does not validate without intermediary present)
 #include "digicert_high_assurance_ev_root_ca.h"
+#include "baltimore_cybertrust_root.h"
 
 #endif	/* AXTLS_YAHOO_CERTS_H */
