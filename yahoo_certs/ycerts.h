@@ -11,4 +11,7 @@
 #include "digicert_high_assurance_ev_root_ca.h"
 #include "baltimore_cybertrust_root.h"
 
+// api.flickr.com (another one)
+#include "class_3_public_primary_certification_authority.h"
+
 #endif	/* AXTLS_YAHOO_CERTS_H */
