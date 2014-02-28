@@ -13,5 +13,6 @@
 
 // api.flickr.com (another one)
 #include "class_3_public_primary_certification_authority.h"
+#include "verisign_class_3_public_primary_certification_authority.h"
 
 #endif	/* AXTLS_YAHOO_CERTS_H */
