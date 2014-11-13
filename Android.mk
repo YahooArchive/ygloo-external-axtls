@@ -63,5 +63,3 @@ LOCAL_SRC_FILES := samples/c/axssl.c
 LOCAL_STATIC_LIBRARIES += libyahoo_axtls
 
 include $(BUILD_EXECUTABLE)
-
-
