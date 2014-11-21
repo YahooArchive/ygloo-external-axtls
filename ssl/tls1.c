@@ -353,7 +353,7 @@ int add_cert(SSL_CTX *ssl_ctx, const uint8_t *buf, int len)
     X509_CTX *cert = NULL;
     int offset;
 
-    while (ssl_ctx->certs[i].buf && i < CONFIG_SSL_MAX_CERTS) 
+    while (i < CONFIG_SSL_MAX_CERTS && ssl_ctx->certs[i].buf) 
         i++;
 
     if (i == CONFIG_SSL_MAX_CERTS) /* too many certs */
@@ -1095,7 +1095,9 @@ int send_packet(SSL *ssl, uint8_t protocol, const uint8_t *in, int length)
             uint8_t iv_size = ssl->cipher_info->iv_size;
             uint8_t *t_buf = alloca(msg_length + iv_size);
             memcpy(t_buf + iv_size, ssl->bm_data, msg_length);
-            get_random(iv_size, t_buf);
+            if (get_random(iv_size, t_buf) < 0)
+                return SSL_NOT_OK;
+
             msg_length += iv_size;
             memcpy(ssl->bm_data, t_buf, msg_length);
         }
@@ -1354,14 +1356,14 @@ int basic_read(SSL *ssl, uint8_t **in_data)
                 goto error;
             }
 
-            /* all encrypted from now on */
-            SET_SSL_FLAG(SSL_RX_ENCRYPTED);
             if (set_key_block(ssl, 0) < 0)
             {
                 ret = SSL_ERROR_INVALID_HANDSHAKE;
                 goto error;
             }
             
+            /* all encrypted from now on */
+            SET_SSL_FLAG(SSL_RX_ENCRYPTED);
             memset(ssl->read_sequence, 0, 8);
             break;
 
@@ -1461,10 +1463,14 @@ int send_change_cipher_spec(SSL *ssl)
 {
     int ret = send_packet(ssl, PT_CHANGE_CIPHER_SPEC, 
             g_chg_cipher_spec_pkt, sizeof(g_chg_cipher_spec_pkt));
-    SET_SSL_FLAG(SSL_TX_ENCRYPTED);
 
     if (ret >= 0 && set_key_block(ssl, 1) < 0)
         ret = SSL_ERROR_INVALID_HANDSHAKE;
+    
+    if (ssl->cipher_info)
+        SET_SSL_FLAG(SSL_TX_ENCRYPTED);
+    if (ssl->cipher_info)
+        SET_SSL_FLAG(SSL_TX_ENCRYPTED);
 
     memset(ssl->write_sequence, 0, 8);
     return ret;
