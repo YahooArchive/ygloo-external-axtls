@@ -5,11 +5,11 @@ AXTLS_SRC_FILES := \
 	crypto/bigint.c \
 	crypto/crypto_misc.c \
 	crypto/hmac.c \
-	crypto/md2.c \
 	crypto/md5.c \
 	crypto/rc4.c \
 	crypto/rsa.c \
-	crypto/sha1.c
+	crypto/sha1.c \
+	crypto/sha256.c
 
 AXTLS_SRC_FILES += \
 	ssl/asn1.c \
@@ -19,8 +19,8 @@ AXTLS_SRC_FILES += \
 	ssl/os_port.c \
 	ssl/p12.c \
 	ssl/tls1.c \
-	ssl/tls1_svr.c \
 	ssl/tls1_clnt.c \
+	ssl/tls1_svr.c \
 	ssl/x509.c
 
 AXTLS_CFLAGS := -fvisibility=hidden ## -fomit-frame-pointer
